@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Test2 {
     public static void main(String[] args) {
-        List<Employee>list = new ArrayList<>();
+        List<Employee> list = new ArrayList<>();
         Employee emp1 = new Employee(100, "Zaur", "Tregulov", 12345);
         Employee emp2 = new Employee(15, "Ivan", "Petrov", 6542);
         Employee emp3 = new Employee(123, "Ivan", "Sidorov", 8542);
@@ -54,14 +54,14 @@ class Employee implements Comparable<Employee> {
     // используя естественный порядок (например по id)
     @Override
     public int compareTo(Employee anotherEmp) {
-        if(this.id == anotherEmp.id){
+        if (this.id == anotherEmp.id) {
             return 0;
         } else if (this.id < anotherEmp.id) {
             return -1;
-        }else{
+        } else {
             return 1;
         }
-       // return this.id - anotherEmp.id;
+        // return this.id - anotherEmp.id;
         //return this.id.compareTo(anotherEmp.id);
         //return this.name.compareTo(anotherEmp.name);
 
@@ -71,7 +71,7 @@ class Employee implements Comparable<Employee> {
 //        }
 //        return res;
 
-//    }
+    }
 }
 
 //class IdComparator implements Comparator<Employee>{
@@ -88,7 +88,7 @@ class Employee implements Comparable<Employee> {
 //    }
 //}
 
-class NameComparator implements Comparator<Employee>{
+class NameComparator implements Comparator<Employee> {
 
     @Override
     public int compare(Employee emp1, Employee emp2) {
@@ -96,10 +96,10 @@ class NameComparator implements Comparator<Employee>{
     }
 }
 
-class SalaryComparator implements Comparator<Employee>{
+class SalaryComparator implements Comparator<Employee> {
 
     @Override
     public int compare(Employee emp1, Employee emp2) {
-        return emp1.salary-emp2.salary;
+        return emp1.salary - emp2.salary;
     }
 }
