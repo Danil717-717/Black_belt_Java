@@ -13,6 +13,8 @@ public class HashCodeEx1 {
      обьекта должен быть одинаковым
     если по equals обьекты равны, то и hashcode тоже должен быть одинаковым
     если по equals обьекты НЕ равны, hashcode может быть одинаковым - кализия
+
+    рекомендуется ключи ставить неизменяемыми обьектами
      */
 
     public static void main(String[] args) {
@@ -33,13 +35,27 @@ public class HashCodeEx1 {
         System.out.println(st1.hashCode());
         System.out.println(st4.hashCode());
         System.out.println(st3.hashCode());
+
+
+        for(Map.Entry<Student,Double> entry: map1.entrySet()){
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+        }
+
+        /*
+        - Initial capacity - начальный размер массива
+        - Load factor - коэфициент того, начколько массив
+        должен быть заполнен, после чего увеличен в двое
+        (16, 0.75f) - 16*0,75 = 12 т.е после 12 элементов будет увелич
+         */
+
+        Map<Integer, String> map2 = new HashMap<>(16, 0.75f);
     }
 }
 
-class Student{
-    String name;
-    String surname;
-    int course;
+final class Student implements Comparable<Student>{
+    final String name;
+    final String surname;
+    final int course;
 
 
 
@@ -69,6 +85,13 @@ class Student{
     @Override
     public int hashCode() {
         return Objects.hash(name, surname, course);
+    }
+
+
+
+    @Override
+    public int compareTo(Student o) {
+        return this.name.compareTo(o.name);
     }
 
 //    @Override
