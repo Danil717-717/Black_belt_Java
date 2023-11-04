@@ -9,7 +9,7 @@ package collection.map_interface;
  позволяет методам работать быстро, но не быстрее,
  чем методы HashMap
 
-
+ Не может содержать null
  */
 
 import java.util.Comparator;
@@ -33,6 +33,7 @@ public class TreeMapExample {
         treeMap.put(7.2,st3);
         treeMap.put(8.2,st6);
         treeMap.put(7.9,st5);
+        //treeMap.put(null,st5);
 
         //Student имплементирует Comparable и по этому может быть
         // ключем, мы определили как сравнивать студентов
