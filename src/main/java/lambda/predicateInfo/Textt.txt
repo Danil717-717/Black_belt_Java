@@ -1,0 +1,3 @@
+Predicate<T>
+boolean test(T t);
+используется методом removeIf

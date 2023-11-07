@@ -1,0 +1,3 @@
+Supplier - поставщик
+Supplier<T>
+T get();

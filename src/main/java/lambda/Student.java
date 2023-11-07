@@ -2,10 +2,10 @@ package lambda;
 
 public class Student {
     String name;
-    char sex;
-    int age;
-    int course;
-    double avgGrade;
+    public char sex;
+    public int age;
+    public int course;
+    public double avgGrade;
 
     public Student(String name, char sex, int age, int course, double avgGrade) {
         this.name = name;

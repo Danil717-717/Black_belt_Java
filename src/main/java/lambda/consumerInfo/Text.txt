@@ -1,0 +1,4 @@
+Consumer - потребитель противоположен supplier
+Consumer<T>
+void accept(T t);
+используется forEach
