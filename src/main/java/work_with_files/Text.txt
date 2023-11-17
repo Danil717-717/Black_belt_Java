@@ -1,0 +1,284 @@
+           Character Streams and Byte Streams
+    Stream (поток) для работы с файлами - это
+упорядоченная последовательность данных
+    Файлы разделяют на:
+    * читабельные для человека - text files;
+    * нечитабельные для человека - binary files.
+    При работе с текстовыми и бинарными файлами нам
+необходимо использовать разные типы стримов.
+
+
+              FileReader & FileWriter
+     FileReader и FileWriter используют для работы с
+текстовыми файлами.
+     FileWriter writer = new FileWriter("file1.txt");
+     FileReader reader = new FileReader("file1.txt");
+         Никогда не забывайте закрывать стримы
+              после использования!!!!!
+
+
+                Try with resources
+     try(FileWriter writer = new FileWriter("file1.txt");
+         FileReader reader = new FileReader("file1.txt");)
+     {
+     // code...
+     }
+     Ресурс, который используется в try with resources
+должен имплементировать интерфейс AutoCloseable
+
+
+            BufferedReader & BufferedWriter
+    Использование буферизации в стримах позволяет достичь
+большей эффективности при чтении файла или записи в него.
+    BufferedWriter writer = new BufferedWriter(new
+                                 FileWriter("file1.txt");
+    BufferedReader reader = new BufferedReader(new
+                                 FileReader("file1.txt");
+
+
+            FileInputStream & FileOutputStream
+    FileInputStream & FileOutputStream используются для
+работы с бинарными файлами.
+    FileInputStream inputStream =
+                    new FileInputStream("test2.bin");
+    FileOutputStream outputStream =
+                    new FileOutputStream("test2.bin");
+
+
+             DataInputStream & DataOutputStream
+    DataInputStream & DataOutputStream позволяют
+записывать в файл и читать из него примитивный типы данных.
+   DataInputStream inputStream =
+    new DataInputStream(new FileInputStream("test2.bin");
+   DataOutputStream outputStream =
+    new DataOutputStream(new FileOutputStream("test2.bin");
+
+
+                   Serialization
+    Сериализация - это процесс преобразования обьекта в
+последовательность байт.
+    Десериализация - это процесс востановления обьекта,
+из этих байт.
+      Десериализация
+      ObjectInputStream inputStream =
+   new ObjectInputStream(new FileInputStream("test2.bin"));
+      Сериализация
+      ObjectOutputStream outputStream =
+   new ObjectOutputStream(new FileOutputStream("test2.bin"));
+
+    Для того чтобы объект класса можно было сериализовать,
+класс должен имплементировать интерфейс Serializable(как
+метка).
+    Поля класса, помеченные ключевым словом transient,
+не записываются в файл при сериализации.
+    В сериализуемом классе необходимо использовать
+serialVersionUID для обозначения версии класса.
+
+
+                RandomAccessFile
+    Класс RandomAccessFile позволяет читать информацию
+из любого места файла и записывать информацию в любое
+место файла.
+   r  - чтение
+   w  - запись
+   rw - чтение и запись
+   .seek(искать) - ищет необходимое нам место с которого
+                   нужно начать чтение или запись
+   .getFilePointer() - узнать, где находится курсор
+
+    RandomAccessFile file =
+        new RandomAccessFile("test1.txt", "rw");
+
+
+java.io
+               Класс File
+    Класс File позволяет управлять информацией о файлах
+и директориях.
+
+        File file = new File("test1.txt");
+    .getAbsolutePath() - получение абсолютного пути
+    .isAbsolute()    - проверяет наш путь абсолютный
+                       или нет
+    .isDirectory()   - проверка является ли наш файл
+                       директорией
+    .exists()        - проверяет существует ли
+                       наш файл/директория
+    .createNewFile() - создаст новый файл
+                       true-создался false-не создался
+                       или уже есть
+    .mkdir()         - создаст папку
+                       true-создался false-не создался
+                       или уже есть
+    .length()        - размер файла в байтах, размер
+                       директории нужно писать код
+                       самому с проверкой размеров
+                       каждого файла в папке
+    .delete()        - удаление файла, папку можно
+                       удалить только если она пуста
+    .listFiles()     - проверка содержимого нашей папки
+                       вывод массивом файлов File[] = ..
+                       Arrays.toString
+    .isHidden()      - проверка скрыт ли наш файл/
+                       папка
+    .canRead()       - проверка доступа на чтение
+    .canWrite()      - проверка доступа на запись
+    .canExecute()    - проверка на выполнение
+                       (запуск) этого файла
+
+
+java.nio(new input output)
+                  Buffers and Channels
+                  (буферы  и  каналы)
+    Buffers - это блок памяти, в который мы можем
+записывать информацию, а так же читать ее.
+    В отличии от стримов Channel может как читать
+так и записывать в него.
+    Чтение файла: Channel читает информацию из файла
+и записывает в Buffer.
+    Запись в файл: Channel читает информацию из
+Buffer и записывает ее в файл.
+    Стримы всегда работают в одном направлении
+Channel работают в обоих направления(чтение запись)
+
+position - грубо говоря это где сейчас наш курсор
+           прочитали 1 позицию, курсор передвинулся
+           на 2 и тд
+limit    - это если например буфер 5 байт, а информ
+           которую мы иуда поместили 3 байта, на 3
+           байте ставится limit, для того, чтобы
+           курсор не пошел дальше
+capacity - размер буфера
+
+    FileChannel channel = file.getChanel();
+    ByteBuffer buffer = ByteBuffer.allocate(100);
+
+    channel.read(buffer)
+    buffer.flip() - меняет режим буфера из режима
+                записи в режим чтения, позиция
+                меняется с текущей на 0 позицию
+                (в начало)
+    buffer.hasRemaining() - читает пока есть что
+                читать
+    buffer.get() - читает из буфера по 1 байту
+    buffer.clear() - данные буфера не очищаются,
+                ставит на 0-ую позицию и теперь
+                будет заново перезаписываться с 0
+                старая информация затирается
+    buffer.put() - помещение текста в буфер
+    channel.write(buffer)
+    buffer.rewind() - при чтении поместит позицию
+                на ячейку 0 (в начало), это
+                позволит прочитать файл с 0 позиц
+    buffer.compact() - схож с методом clear(), но
+                теперь непрочитанные байты не
+                удаляются, а создается новый буфер
+                и непрочитанный байты копируются
+                в начало, и записываются оставшиеся
+                байты
+    buffer.mark() -  ставит флаг на позицию, чтобы
+                мв могли к ней далее вернуться
+    buffer.reset() - возврат курсора к флагу
+
+
+
+            Interface Path & class Files
+    Объект типа Path представляет собой путь к
+файлу или директории.
+
+        Path path = Paths.get("text1.txt");
+
+    path.getFileName() - возвращает имя файла или
+                директории по этому пути
+    path.getParent() - возвращает родителя файла
+                или директории
+    path.getRoot() - возвращает корень файла или
+                директории
+    path.isAbsolute() - проверяет абсолютный ли
+                путь
+    path.toAbsolutePath()- показывает абсолютный
+                путь
+    path1.resolve(path2) - объединяет 2 пути в 1
+    path1.relativize(path2) - возвращает относи-
+                тельный путь. Путь path2 относи-
+                тельно пути path1
+
+    Files.exists(path) - проверяет существует ли
+    Files.createFile(Path) - создает файл
+    Files.createDirectory(path)- создает
+                                    директорию
+    Files.isReadable() - проверка на чтение
+    Files.isWritable() - проверка на запись
+    Files.isExecutable() - проверка на запуск
+    Files.isSameFile(path1, path2) - проверка
+                ссылается ли эти пути на один
+                и тот же файл
+    Files.size() - размер файла
+    Files.getAttribute(path, attribute_name) -
+                вывод атрибута, атрибуты
+                разные, например время создания
+                файла
+    Files.readAttributes(path, attributes) -
+                вывод нескольких атрибут у
+                файла (*-все атрибуты)
+   (lastAccessTime:2023-11-17T10:00:17.4596774Z
+   lastModifiedTime:2023-11-17T10:00:17.4596774Z
+   size:33
+   creationTime:2023-11-17T09:47:33.172778Z
+   isSymbolicLink:false
+   isRegularFile:true
+   fileKey:null
+   isOther:false
+   isDirectory:false)
+    Files.copy(path1, path2, copy_options) -
+                копирует файл path1 в path2
+    Files.move(path1, path2, copy_options) -
+                перемещает файл, директорию
+                можно этим же методом
+                переименовать перемещением
+    Files.delete(path) - удаляет наши файлы
+                и папки(пустую)
+    Files.write(path, byte_array) - записы-
+                вает в файл массив байтов
+    Files.readAllLines(path) - прочитаем
+                все строки из файла
+
+
+                Files.walkFileTree
+    Метод Files.walkFileTree(Path start,
+FileVisitor visitor) используются дл обхода
+дерева файлов.
+    Логика обхода дерева файлов заключается
+ в классе, имплементирующем интерфейс
+ FileVisitor.
+    .preVisitDirectory() - срабатывает перед
+ обращением к элементам папки
+    .visitFile() - срабатывает при обращении
+ к файлу
+    .postVisitDirectory() - срабатывает после
+ обращения ко всем элементам папки
+    .visitFileFailed() - срабатывает когда
+ файл по каким-то причинам недоступен
+
+                enum FileVisitResult
+     (обязательные действия после того как
+     в переопределенных методах мы написали
+     свой код, то что мы хотим сделать)
+           значения FileVisitResult:
+   CONTINUE - означает, что нужно продолжать
+              обход по файлам
+   TERMINATE - означает, что нужно немедленно
+              прекратить обход по файлам
+   SKIP_SUBTREE - означает, что в данную
+              директорию заходить не надо
+   SKIP_SIBLINGS - означает, что в данной
+              директории продолжать обход
+              по файлам не нужно
+
+
+
+
+
+
+
+
+
