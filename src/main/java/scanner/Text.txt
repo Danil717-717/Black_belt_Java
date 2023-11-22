@@ -1,0 +1,20 @@
+                Scanner
+
+    работа с консолью
+    Scanner sc = new Scanner(System.in);
+
+    nextByte()
+    nextShort()
+    nextInt()
+    nextLong()
+    nextFloat()
+    nextDouble()  - дробное с ,
+    nextBoolean() - bool
+
+    next()     - записывает символы до 1ого пробела
+    nextLine() - записывает всю введеную строку
+        проверяющие методы
+    hasNext()    - есть ли слово
+    hasNextLine()- строка
+    hasNextInt() - инт
+    .....
